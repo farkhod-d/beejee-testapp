@@ -44,7 +44,7 @@ return [
         'module_map_cache_key' => 'application.module.cache',
 
         // The path in which to cache merged configuration.
-        'cache_dir' => 'data/cache/',
+        'cache_dir' => __DIR__ . '/../data/cache/',
 
         // Whether or not to enable modules dependency checking.
         // Enabled by default, prevents usage of modules that depend on other modules
@@ -62,7 +62,33 @@ return [
     //     ],
     // ],
 
-    // Initial configuration with which to seed the ServiceManager.
-    // Should be compatible with Zend\ServiceManager\Config.
-    // 'service_manager' => [],
+    // Начальная конфигурация, которая подается ServiceManager'у.
+    // Должна быть совместима с Zend\ServiceManager\Config.
+    // Регистрация сервисов под этим ключом
+    'service_manager' => [
+        'services' => [
+            // Регистрация экземпляров классов сервисов
+            //...
+        ],
+        'invokables' => [
+            // Регистрация вызываемых классов
+            //...
+        ],
+        'factories' => [
+            // Регистрация фабрик
+            // Register CurrencyConverter service.
+            // CurrencyConverter::class => InvokableFactory::class
+        ],
+        'abstract_factories' => [
+            // Регистрация абстрактных фабрик
+            //...
+        ],
+        'aliases' => [
+            // Регистрация псевдонимов сервисов
+            // 'CurConv' => CurrencyConverter::class
+        ],
+        'shared' => [
+            // Укажите какие сервисы должны быть non-shared
+        ]
+    ],
 ];
