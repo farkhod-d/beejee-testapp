@@ -7,6 +7,7 @@
 
 namespace Application\Controller;
 
+use Application\Form\IssueForm;
 use Application\Service\IssueService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -46,11 +47,8 @@ class IndexController extends AbstractActionController
             "cUserName" => $this->_createIconAndClass("userName", $sortBy, $orderBy),
             "cUserEmail" => $this->_createIconAndClass("userEmail", $sortBy, $orderBy),
         ]);
-
         return $model;
     }
-
-
 
     private function _createIconAndClass($current, $sortBy, $orderBy)
     {
@@ -71,7 +69,30 @@ class IndexController extends AbstractActionController
         return $data;
     }
 
+    public function createAction()
+    {
+        $form = new IssueForm();
 
+        if ($this->getRequest()->isPost()) {
+            // Fill in the form with POST data
+            $data = $this->params()->fromPost();
+            $form->setData($data);
 
+            // Validate form
+            if ($form->isValid()) {
+                // Get filtered and validated data
+                $data = $form->getData();
+                $this->issueService->create($data);
+
+                $this->flashMessenger()->addInfoMessage('Новая задача успешно добавлена');
+                // Redirect to "Thank You" page
+                return $this->redirect()->toRoute('home');
+            }
+        }
+
+        return new ViewModel([
+            'form' => $form
+        ]);
+    }
 
 }

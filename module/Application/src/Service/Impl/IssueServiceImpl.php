@@ -8,7 +8,6 @@ namespace Application\Service\Impl;
 use Application\Entity\Issues;
 use Application\Service\IssueService;
 use Doctrine\ORM\EntityManager;
-
 use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Zend\Paginator\Paginator;
@@ -69,5 +68,14 @@ class IssueServiceImpl implements IssueService
     }
 
 
+    public function create(Issues $entity)
+    {
+        $entity->setStatus(false)
+            ->setCreatedAt(new \DateTime());
 
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+
+        return $entity;
+    }
 }

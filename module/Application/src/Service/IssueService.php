@@ -9,9 +9,13 @@ declare(strict_types=1);
 
 namespace Application\Service;
 
+use Application\Entity\Issues;
 use Zend\Paginator\Paginator;
 
 interface IssueService
 {
     public function getList($sortBy, $orderBy, $page, $size): Paginator;
+
+    public function create(Issues $entity);
+
 }

@@ -23,6 +23,17 @@ return [
                     ],
                 ],
             ],
+            'create' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/create/',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'create',
+                    ],
+                ],
+            ],
+
             // 'application' => [
             //     'type'    => Segment::class,
             //     'options' => [

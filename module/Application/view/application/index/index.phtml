@@ -11,6 +11,7 @@ $paginator = $this->paginator;
 $sortBy = $this->sortBy;
 $orderBy = $this->orderBy;
 
+echo $this->flashMessenger()->render("info", array('alert', 'alert-dismissible', 'alert-info'));
 ?>
 <div class="card">
     <table class="table">
@@ -55,7 +56,7 @@ $orderBy = $this->orderBy;
             <th scope="col">
                 <div class="d-inline float-sm-left">Задача</div>
                 <div class="d-inline float-sm-right">
-                    <a href="#" class="btn btn-link№ btn-outline-dark btn-secondary№ btn-sm">
+                    <a href="<?= $this->url("create")?>" class="btn btn-link№ btn-outline-dark btn-secondary№ btn-sm">
                         <i class="fas fa-plus-square"></i>
                         Новая
                     </a>

@@ -1,0 +1,55 @@
+<?php
+/**
+ *
+ * Zend View
+ *
+ * @author Farkhod Daniyarov <fudeglan@gmail.com>
+ * @date 13.07.2019 18:41
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ * @var $form \Zend\Form\Form
+ */
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('create'));
+$form->setAttribute('method', 'post');
+
+
+$form->get('userName')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Введите пожалуйста свое имя',
+    'title' => 'Введите пожалуйста свое имя',
+]);
+$form->get('userEmail')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Введите пожалуйста свой Email',
+]);
+$form->get('note')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Введите пожалуйста задачу',
+]);
+
+
+$form->prepare();
+// Get the form label plugin
+$formLabel = $this->plugin('formLabel');
+
+//echo $this->form($form);
+
+?>
+<h3 class="mb-3 pl-2">Добавление новой задачи</h3>
+<div class="card p-4">
+    <?= $this->form()->openTag($form) ?>
+    <div class="form-group">
+      <?= $this->formRow($form->get('userName')) ?>
+    </div>
+    <div class="form-group">
+      <?= $this->formRow($form->get('userEmail')) ?>
+    </div>
+    <div class="form-group">
+      <?= $this->formRow($form->get('note')) ?>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a class="btn btn-secondary" href="<?= $this->url("home")?>">Назад</a>
+    <?= $this->form()->closeTag() ?>
+</div>

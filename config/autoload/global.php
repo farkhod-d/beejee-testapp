@@ -76,6 +76,11 @@ return [
             'resource_map' => [
             ],
         ],
+        'flashmessenger' => [
+            'message_open_format' => '<div%s><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><ul class="mb-0 list-unstyled"><li>',
+            'message_close_string' => '</li></ul></div>',
+            'message_separator_string' => '</li><li>',
+        ],
     ],
     'service_manager' => [
         'invokables' => [

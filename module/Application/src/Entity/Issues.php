@@ -73,7 +73,7 @@ class Issues
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -82,7 +82,7 @@ class Issues
      * @param int $id
      * @return Issues
      */
-    public function setId(int $id): Issues
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -91,7 +91,7 @@ class Issues
     /**
      * @return string
      */
-    public function getUserName(): string
+    public function getUserName()
     {
         return $this->userName;
     }
@@ -100,7 +100,7 @@ class Issues
      * @param string $userName
      * @return Issues
      */
-    public function setUserName(string $userName): Issues
+    public function setUserName(string $userName)
     {
         $this->userName = $userName;
         return $this;
@@ -109,7 +109,7 @@ class Issues
     /**
      * @return string
      */
-    public function getUserEmail(): string
+    public function getUserEmail()
     {
         return $this->userEmail;
     }
@@ -118,7 +118,7 @@ class Issues
      * @param string $userEmail
      * @return Issues
      */
-    public function setUserEmail(string $userEmail): Issues
+    public function setUserEmail(string $userEmail)
     {
         $this->userEmail = $userEmail;
         return $this;
@@ -127,7 +127,7 @@ class Issues
     /**
      * @return bool
      */
-    public function isStatus(): bool
+    public function isStatus()
     {
         return $this->status;
     }
@@ -136,7 +136,7 @@ class Issues
      * @param bool $status
      * @return Issues
      */
-    public function setStatus(bool $status): Issues
+    public function setStatus(bool $status)
     {
         $this->status = $status;
         return $this;
@@ -145,7 +145,7 @@ class Issues
     /**
      * @return \DateTime
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
@@ -154,7 +154,7 @@ class Issues
      * @param \DateTime $createdAt
      * @return Issues
      */
-    public function setCreatedAt(\DateTime $createdAt): Issues
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
         return $this;
@@ -163,7 +163,7 @@ class Issues
     /**
      * @return \DateTime|null
      */
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
@@ -172,7 +172,7 @@ class Issues
      * @param \DateTime|null $updatedAt
      * @return Issues
      */
-    public function setUpdatedAt(?\DateTime $updatedAt): Issues
+    public function setUpdatedAt(?\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
         return $this;
@@ -181,7 +181,7 @@ class Issues
     /**
      * @return string
      */
-    public function getNote(): string
+    public function getNote()
     {
         return $this->note;
     }
@@ -190,7 +190,7 @@ class Issues
      * @param string $note
      * @return Issues
      */
-    public function setNote(string $note): Issues
+    public function setNote(string $note)
     {
         $this->note = $note;
         return $this;
