@@ -11,6 +11,7 @@ return [
         'connection' => [
             'orm_default' => [
                 'driverClass' => PDOMySqlDriver::class,
+                'doctrine_type_mappings' => ['enum' => 'string'],
                 'params' => [
                     'host' => 'localhost',
                     'port' => '3306',
@@ -43,7 +44,7 @@ return [
             'orm_default' => [
                 'class' => MappingDriverChain::class,
                 'drivers' => [
-                    'Payment\Entity' => 'orm_default_driver',
+                     __NAMESPACE__ . '\Entity' => 'orm_default_driver',
                 ],
             ],
             'orm_default_driver' => [

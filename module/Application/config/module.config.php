@@ -7,15 +7,40 @@
 
 namespace Application;
 
+use Application\Service\Factory\IssueServiceFactory;
+use Application\Service\Impl\IssueServiceImpl;
+use Application\Service\IssueService;
 use Zend\Mvc\Controller\LazyControllerAbstractFactory;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\EntityManager;
 
 return [
+
+    'doctrine' => [
+        'driver' => [
+           'my_annotation_driver' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [
+                    __DIR__ .  '/../src/Entity'
+                ],
+            ],
+            'orm_default' => [
+                'drivers' => [
+                     __NAMESPACE__ . '\Entity' => 'orm_default_driver'
+                ],
+            ],
+        ],
+    ],
+
     // router in router.config.php
     'controllers' => [
         'invokables' => [
-            Controller\IndexController::class
+            //Controller\IndexController::class
         ],
         'factories' => [
+            Controller\IssueController::class => Controller\Factory\IssueControllerFactory::class,
+            Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
             // Controller\YandexController::class => Controller\Factory\YandexControllerFactory::class,
             // Controller\BackController::class => LazyControllerAbstractFactory::class,
         ],
@@ -41,7 +66,6 @@ return [
             'ViewJsonStrategy',
         ],
     ],
-
     'view_helper_config' => [
         'asset' => [
             'resource_map' => [
@@ -56,12 +80,14 @@ return [
             // PaymentManagerInterface::class => PaymentManager::class,
             // YandexServiceInterface::class => YandexService::class,
             // WebmoneyServiceInterface::class => WebmoneyService::class,
+            IssueService::class => IssueServiceImpl::class
         ],
 
         'invokables' => [
             // ZendClient::class,
         ],
         'factories' => [
+            IssueServiceImpl::class => IssueServiceFactory::class
             // YandexClient::class => YandexClientFactory::class,
 
             // PaymentManager::class => PaymentManagerFactory::class,

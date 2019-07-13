@@ -1,0 +1,60 @@
+<?php
+/**
+ *
+ * Zend View
+ *
+ * @author Farkhod Daniyarov <fudeglan@gmail.com>
+ * @date 13.07.2019 17:08
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ */
+?>
+
+<?php if ($this->pageCount): ?>
+    <nav>
+        <ul class="pagination">
+            <!-- Previous page link -->
+            <?php if (isset($this->previous)): ?>
+                <li class="page-item">
+                    <a href="<?= $this->url($this->route, [], ['query' => ['page' => $this->previous, 'sortBy' => $this->sortBy, 'orderBy' => $this->orderBy]]); ?>"
+                       class="page-link"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            <?php else: ?>
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            <?php endif; ?>
+
+            <!-- Numbered page links -->
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <?php if ($page != $this->current): ?>
+                    <li class="page-item">
+                        <a href="<?= $this->url($this->route, [], ['query' => ['page' => $page, 'sortBy' => $this->sortBy, 'orderBy' => $this->orderBy]]); ?>"
+                           class="page-link"><?= $this->escapeHtml($page); ?></a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link"><?= $this->escapeHtml($page); ?></span>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <!-- Next page link -->
+            <?php if (isset($this->next)): ?>
+                <li class="page-item">
+                    <a href="<?php echo $this->url($this->route, [], ['query' => ['page' => $this->next, 'sortBy' => $this->sortBy, 'orderBy' => $this->orderBy]]); ?>"
+                       aria-label="Next" class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            <?php else: ?>
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+<?php endif; ?>
+

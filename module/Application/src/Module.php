@@ -59,8 +59,8 @@ class Module implements ConfigProviderInterface
         /**
          * настройки EVENT_RENDER
          */
-        //$eventManager = $e->getApplication()->getEventManager();
-        //$eventManager->attach(MvcEvent::EVENT_RENDER, [$this, 'setLayoutParams']);
+        $eventManager = $e->getApplication()->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_RENDER, [$this, 'setLayoutParams']);
     }
 
     public function translateConfig(MvcEvent $e)
@@ -87,7 +87,6 @@ class Module implements ConfigProviderInterface
 
     /**
      * @param MvcEvent $e
-     * @todo Включить
      */
     public function setLayoutParams($e)
     {
@@ -109,7 +108,6 @@ class Module implements ConfigProviderInterface
 
         //region header meta
         $headMeta
-            ->appendName('robots', 'noindex, nofollow')
             ->appendHttpEquiv('Content-Type', 'text/html')
             ->appendHttpEquiv('Content-Language', 'ru-RU')
             ->appendHttpEquiv('cleartype', 'on')
@@ -126,80 +124,19 @@ class Module implements ConfigProviderInterface
             ->appendName('msapplication-tooltip', 'Description')
             ->appendHttpEquiv('imagetoolbar', 'no')
             ->appendName('msapplication-TileColor', '#2b5797')
-            ->appendName('msapplication-TileImage', '/assets/img/favicons/apple-touch-icon-144x144.png')
-            ->appendName('msapplication-config', '/assets/img/favicons/browserconfig.xml')
             ->appendName('theme-color', '#ffffff');
         //endregion
-        //region Favicons
-        $headLink()
-            ->headLink([
-                'rel' => 'icon shortcut',
-                'href' => '/assets/img/favicons/favicon.ico',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'href' => '/assets/img/favicons/apple-touch-icon-57x57.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '114x114',
-                'href' => '/assets/img/favicons/apple-touch-icon-114x114.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '72x72',
-                'href' => '/assets/img/favicons/apple-touch-icon-72x72.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '144x144',
-                'href' => '/assets/img/favicons/apple-touch-icon-144x144.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '60x60',
-                'href' => '/assets/img/favicons/apple-touch-icon-60x60.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '120x120',
-                'href' => '/assets/img/favicons/apple-touch-icon-120x120.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '76x76',
-                'href' => '/assets/img/favicons/apple-touch-icon-76x76.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '152x152',
-                'href' => '/assets/img/favicons/apple-touch-icon-152x152.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon',
-                'sizes' => '180x180',
-                'href' => '/assets/img/favicons/apple-touch-icon-180x180.png',
-            ])
-            ->headLink([
-                'rel' => 'apple-touch-icon-precomposed',
-                'href' => '/assets/img/favicons/apple-touch-icon-180x180.png',
-            ])
-            ->headLink([
-                'rel' => 'icon',
-                'type' => 'image/png',
-                'sizes' => '192x192',
-                'href' => '/assets/img/favicons/favicon-192.png',
-            ]);
-        //endregion
         //region HeadLink
-        $headLink
-            ->appendStylesheet($asset('fonts.css'), 'screen', true, [
-                'crossorigin' => 'anonymous',
-            ])
-            ->appendStylesheet($asset('payment.style.css'), 'screen', true, [
-                'crossorigin' => 'anonymous',
-            ]);
+        // $headLink
+        //     ->appendStylesheet('css/bootstrap.min.css', 'screen', true, ['crossorigin' => 'anonymous'])
+        //     ->appendStylesheet('css/bootstrap-theme.min.css', 'screen', true, ['crossorigin' => 'anonymous'])
+        //     ->appendStylesheet('css/style.css', 'screen', true, ['crossorigin' => 'anonymous']);
         //endregion
+
+        // $headScript
+        //     ->appendFile("js/jquery-3.1.0.min.js")
+        //     ->appendFile("js/bootstrap.min.js")
+        // ;
 
         $headMeta->setIndent(4);
         $headLink->setIndent(4);

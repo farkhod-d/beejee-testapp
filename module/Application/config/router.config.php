@@ -23,13 +23,26 @@ return [
                     ],
                 ],
             ],
-            'application' => [
+            // 'application' => [
+            //     'type'    => Segment::class,
+            //     'options' => [
+            //         'route'    => '/application[/:action]',
+            //         'defaults' => [
+            //             'controller' => Controller\IndexController::class,
+            //             'action'     => 'index',
+            //         ],
+            //     ],
+            // ],
+            'issue' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/application[/:action]',
+                    'route'    => '/api/issue[/:id]',
+                    'constraints' => [
+                        'id'     => '[a-zA-Z0-9]+',
+                    ],
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
+                        'controller' => Controller\IssueController::class,
+                        'isAuthorizationRequired' => false,
                     ],
                 ],
             ],
