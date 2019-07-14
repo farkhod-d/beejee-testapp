@@ -36,11 +36,11 @@ class Issues
     private $userEmail;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="status", type="boolean", nullable=false, options={"comment"="Статус задачи"})
+     * @ORM\Column(name="status", type="smallint", nullable=false, options={"unsigned"=true, "comment"="Статус задачи"})
      */
-    private $status = '0';
+    private $status = 0;
 
     /**
      * @var \DateTime
@@ -129,14 +129,19 @@ class Issues
      */
     public function isStatus()
     {
+        return $this->status == 0 ? false : true;
+    }
+
+    public function getStatus()
+    {
         return $this->status;
     }
 
     /**
-     * @param bool $status
+     * @param int $status
      * @return Issues
      */
-    public function setStatus(bool $status)
+    public function setStatus($status)
     {
         $this->status = $status;
         return $this;

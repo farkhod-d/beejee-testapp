@@ -8,7 +8,6 @@
 namespace Application\Controller;
 
 use Application\Form\IssueForm;
-use Application\Form\LoginForm;
 use Application\Service\IssueService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -101,9 +100,11 @@ class IndexController extends AbstractActionController
             if ($form->isValid()) {
                 // Get filtered and validated data
                 $data = $form->getData();
-                $this->issueService->create($data);
+                $issue = $this->issueService->create($data);
 
-                $this->flashMessenger()->addInfoMessage('Новая задача успешно добавлена');
+                $this->flashMessenger()->addInfoMessage(sprintf("Новая задача <a href=\"%s\">#%s</a> успешно добавлена",
+                    $this->url()->fromRoute("edit", ["id" => $issue->getId()]), $issue->getId()));
+
                 // Redirect to "Thank You" page
                 return $this->redirect()->toRoute('home');
             }
@@ -113,4 +114,61 @@ class IndexController extends AbstractActionController
             'form' => $form
         ]);
     }
+
+    /**
+     */
+    public function editAction()
+    {
+        $id = (int)$this->params()->fromRoute('id', -1);
+        if ($id <= 0) {
+            $this->getResponse()->setStatusCode(404);
+            return false;
+        }
+
+        // Find the by ID
+        $issue = $this->issueService->findOneById($id);
+        if ($issue == null) {
+            $this->getResponse()->setStatusCode(404);
+            return false;
+        }
+
+        $form = new IssueForm();
+        $form->bind($issue);
+
+        if ($this->getRequest()->isPost()) {
+            // Get POST data.
+            $data = $this->params()->fromPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->issueService->edit($issue);
+
+                $this->flashMessenger()->addInfoMessage(sprintf("Задача <a href=\"%s\">#%s</a> успешно отредактирована",
+                    $this->url()->fromRoute("edit", ["id" => $issue->getId()]), $issue->getId()));
+                // Redirect
+                return $this->redirect()->toRoute('home');
+            }
+        }
+
+        return new ViewModel([
+            'form' => $form,
+            'id' => $issue->getId()
+        ]);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -70,9 +70,24 @@ class IssueServiceImpl implements IssueService
 
     public function create(Issues $entity)
     {
-        $entity->setStatus(false)
+        $entity->setStatus(0)
             ->setCreatedAt(new \DateTime());
 
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+
+        return $entity;
+    }
+
+    public function findOneById($id)
+    {
+        return $this->entityManager->getRepository(Issues::class)
+            ->findOneById($id);
+    }
+
+    public function edit(Issues $entity)
+    {
+        $entity->setUpdatedAt(new \DateTime());
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
 

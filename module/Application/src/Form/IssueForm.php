@@ -5,12 +5,12 @@ namespace Application\Form;
 
 use Application\Entity\Issues;
 use Zend\Form\Element\Email;
+use Zend\Form\Element\Select;
 use Zend\Form\Element\Text;
 use Zend\Form\Element\Textarea;
 use Zend\Form\Form;
-use Zend\Stdlib\InitializableInterface;
-
 use Zend\Hydrator\ClassMethods;
+use Zend\Stdlib\InitializableInterface;
 
 class IssueForm extends Form implements InitializableInterface
 {
@@ -58,6 +58,20 @@ class IssueForm extends Form implements InitializableInterface
                 ],
             ])
             ->add([
+                'type' => Select::class,
+                'name' => 'status',
+                'options' => [
+                    'label' => 'Статус задачи',
+                    'value_options' => [
+                        0 => 'Новая',
+                        1 => 'Завершенная',
+                    ],
+                ],
+                'attributes' => [
+                    'id' => 'status',
+                ],
+            ])
+            ->add([
                 'type' => Textarea::class,
                 'name' => 'note',
                 'options' => [
@@ -68,6 +82,8 @@ class IssueForm extends Form implements InitializableInterface
                     "rows" => 3,
                 ],
             ]);
+
+
     }
 
     /**
@@ -102,6 +118,21 @@ class IssueForm extends Form implements InitializableInterface
                         'allow' => \Zend\Validator\Hostname::ALLOW_DNS,
                         'useMxCheck' => false,
                     ],
+                ],
+            ],
+        ]);
+
+        $inputFilter->add([
+            'name' => 'status',
+            'required' => false,
+            'filters' => [
+            ],
+            'validators' => [
+                [
+                    'name' => 'InArray',
+                    'options' => [
+                        'haystack' => [0, 1],
+                    ]
                 ],
             ],
         ]);

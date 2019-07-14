@@ -24,6 +24,6 @@ return [
     'Zend\Validator',
     'DoctrineModule',
     'DoctrineORMModule',
-    'restapi',
+    //'restapi',
     'Application',
 ];

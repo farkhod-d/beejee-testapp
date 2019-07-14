@@ -11,10 +11,10 @@ $paginator = $this->paginator;
 $sortBy = $this->sortBy;
 $orderBy = $this->orderBy;
 
-echo $this->flashMessenger()->render("info", array('alert', 'alert-dismissible', 'alert-info'));
+echo $this->flashMessenger()->setAutoEscape(false)->render("info", ['alert', 'alert-dismissible', 'alert-info']);
 ?>
 <div class="card">
-    <table class="table">
+    <table class="table mb-0">
         <thead>
         <tr>
             <th scope="col" width="75px">
@@ -53,10 +53,10 @@ echo $this->flashMessenger()->render("info", array('alert', 'alert-dismissible',
                     <i class="<?= $this->cUserEmail['icon'] ?>"></i>
                 </a>
             </th>
-            <th scope="col">
+            <th scope="col" colspan="<?= $this->identity() == null ?: 2 ?>">
                 <div class="d-inline float-sm-left">Задача</div>
                 <div class="d-inline float-sm-right">
-                    <a href="<?= $this->url("create")?>" class="btn btn-link№ btn-outline-dark btn-secondary№ btn-sm">
+                    <a href="<?= $this->url("create") ?>" class="btn btn-link№ btn-outline-dark btn-secondary№ btn-sm">
                         <i class="fas fa-plus-square"></i>
                         Новая
                     </a>
@@ -90,6 +90,12 @@ echo $this->flashMessenger()->render("info", array('alert', 'alert-dismissible',
                     <td>
                         <?= $this->escapeHtml($item->getNote()) ?>
                     </td>
+                    <?php if ($this->identity()): ?>
+                        <td class="text-center">
+                            <a href="<?= $this->url('edit', ['id' => $item->getId()]) ?>"
+                               class="btn btn-secondary btn-sm">Edit</a>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>

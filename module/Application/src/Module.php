@@ -7,19 +7,21 @@
 
 namespace Application;
 
-use Zend\Http\Headers;
+use Application\Controller\AuthController;
+use Application\Service\AuthManager;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\PhpEnvironment\Response;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\ModuleManagerInterface;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
+use Zend\Session\SessionManager;
+use Zend\Validator\AbstractValidator;
 use Zend\View\Helper\Asset;
 use Zend\View\Helper\HeadLink;
 use Zend\View\Helper\HeadMeta;
 use Zend\View\Helper\HeadScript;
 use Zend\View\Helper\InlineScript;
-use Zend\Validator\AbstractValidator;
-use Zend\Session\SessionManager;
 
 /**
  * @method Request getRequest()
@@ -36,30 +38,50 @@ class Module implements ConfigProviderInterface
             require __DIR__ . '/../config/router.config.php'
         );
     }
+
     public function init(ModuleManagerInterface $manager)
     {
         $eventManager = $manager->getEventManager();
-
         // Register the event listener method.
         $sharedEventManager = $eventManager->getSharedManager();
-        $sharedEventManager->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
-        $sharedEventManager->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, [$this, 'translateConfig'], 100);
-        $sharedEventManager->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, [$this, 'sessionConfig'], 100);
     }
-    public function onDispatch(MvcEvent $e) {
-        /**
-         * Просим пауков не индексировать
-         * @var Headers $headers
-         */
-        $headers = $e->getResponse()->getHeaders();
-        $headers->addHeaders(['X-Robots-Tag' => 'noindex']);
 
-        /**
-         * настройки EVENT_RENDER
-         */
-        $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_RENDER, [$this, 'setLayoutParams']);
+    /**
+     * This method is called once the MVC bootstrapping is complete and allows
+     * to register event listeners.
+     * @param MvcEvent $event
+     */
+    public function onBootstrap(MvcEvent $event)
+    {
+        // Get event manager.
+        $eventManager = $event->getApplication()->getEventManager();
+        $sharedEventManager = $eventManager->getSharedManager();
+
+        $sharedEventManager->attach(AbstractActionController::class,
+                MvcEvent::EVENT_DISPATCH, [$this, 'accessFilter'], 100);
+
+        $sessionManager = $event->getApplication()->getServiceManager()->get(SessionManager::class);
+        $this->forgetInvalidSession($sessionManager);
+
+        $this->translateConfig($event);
+        $this->setLayoutParams($event);
     }
+
+    protected function forgetInvalidSession($sessionManager)
+    {
+    	try {
+    		$sessionManager->start();
+    		return;
+    	} catch (\Exception $e) {
+    	}
+    	/**
+    	 * Session validation failed: toast it and carry on.
+    	 */
+    	// @codeCoverageIgnoreStart
+    	session_unset();
+    	// @codeCoverageIgnoreEnd
+    }
+
     public function translateConfig(MvcEvent $e)
     {
         $application = $e->getApplication();
@@ -69,16 +91,51 @@ class Module implements ConfigProviderInterface
         $translator = $serviceManager->get('translator');
         AbstractValidator::setDefaultTranslator($translator);
     }
-    public function sessionConfig(MvcEvent $e) {
-        $application = $e->getApplication();
-        $serviceManager = $application->getServiceManager();
 
-        /**
-         * Следующая строка создает экземпляр SessionManager и автоматически делает SessionManager "стандартным",
-         * чтобы избежать передачи диспетчера сеансов в качестве зависимости от других моделей.
-         * @var \Zend\Session\SessionManager $sessionManager
-         */
-        $sessionManager = $serviceManager->get(SessionManager::class);
+
+    /**
+     * Метод-обработчик для события 'Dispatch'. Мы обрабатываем событие Dispatch
+     * для вызова фильтра доступа. Фильтр доступа позволяет определить,
+     * может ли пользователь просматривать страницу. Если пользователь не
+     * авторизован, и у него нет прав для просмотра, мы перенаправляем его
+     * на страницу входа на сайт.
+     * @param MvcEvent $e
+     * @return
+     */
+    public function accessFilter(MvcEvent $e)
+    {
+        // Получаем контроллер и действие, которому был отправлен HTTP-запрос.
+        /** @var \Zend\Mvc\Controller\AbstractActionController $controller */
+        $controller = $e->getTarget();
+        $controllerName = $e->getRouteMatch()->getParam('controller', null);
+        $actionName = $e->getRouteMatch()->getParam('action', null);
+
+        // Конвертируем имя действия с пунктирами в имя в верблюжьем регистре.
+        $actionName = str_replace('-', '', lcfirst(ucwords($actionName, '-')));
+
+        // Получаем экземпляр сервиса AuthManager.
+        $authManager = $e->getApplication()->getServiceManager()->get(AuthManager::class);
+
+        // Выполняем фильтр доступа для каждого контроллера кроме AuthController
+        // (чтобы избежать бесконечного перенаправления).
+        if ($controllerName != AuthController::class &&
+            !$authManager->filterAccess($controllerName, $actionName)) {
+
+            // Запоминаем URL страницы, к которой пытался обратиться пользователь. Мы перенаправим пользователя
+            // на этот URL после успешной авторизации.
+            $uri = $e->getApplication()->getRequest()->getUri();
+            // Делаем URL относительным (убираем схему, информацию о пользователе, имя хоста и порт),
+            // чтобы избежать перенаправления на другой домен недоброжелателем.
+            $uri->setScheme(null)
+                ->setHost(null)
+                ->setPort(null)
+                ->setUserInfo(null);
+            $redirectUrl = $uri->toString();
+
+            // Перенаправляем пользователя на страницу "Login".
+            return $controller->redirect()->toRoute('login', [],
+                ['query' => ['redirectUrl' => $redirectUrl]]);
+        }
     }
 
     /**
@@ -88,7 +145,6 @@ class Module implements ConfigProviderInterface
     {
         // Getting the view helper manager from the application service manager
         $viewHelperManager = $e->getApplication()->getServiceManager()->get('ViewHelperManager');
-
         /**
          * @var HeadLink $headLink
          * @var HeadMeta $headMeta
@@ -118,8 +174,7 @@ class Module implements ConfigProviderInterface
             ->appendName('apple-mobile-web-app-status-bar-style', 'black-translucent')
             ->appendName('application-name', 'Title')
             ->appendName('msapplication-tooltip', 'Description')
-            ->appendHttpEquiv('imagetoolbar', 'no')
-            ;
+            ->appendHttpEquiv('imagetoolbar', 'no');
         //endregion
         //region Favicon
         // @formatter:off
@@ -158,8 +213,7 @@ class Module implements ConfigProviderInterface
         $inlineScript->appendFile("https://code.jquery.com/jquery-3.3.1.slim.min.js", null, ['crossorigin' => 'anonymous'])
             ->appendFile("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js", null, ['crossorigin' => 'anonymous'])
             ->appendFile("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js", null, ['crossorigin' => 'anonymous'])
-            ->appendScript('$(function () {$(\'[data-toggle="tooltip"]\').tooltip()})')
-        ;
+            ->appendScript('$(function () {$(\'[data-toggle="tooltip"]\').tooltip()})');
         //endregion
 
         $headMeta->setIndent(4);

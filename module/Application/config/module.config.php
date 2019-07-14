@@ -13,7 +13,6 @@ use Application\Service\IssueService;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 return [
-
     'doctrine' => [
         'driver' => [
             'my_annotation_driver' => [
@@ -37,7 +36,6 @@ return [
             //Controller\IndexController::class
         ],
         'factories' => [
-            Controller\IssueController::class => Controller\Factory\IssueControllerFactory::class,
             Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
             Controller\AuthController::class => Controller\Factory\AuthControllerFactory::class,
         ],
@@ -67,7 +65,6 @@ return [
         'asset' => [
             'resource_map' => [
                 // 'fonts.css' => 'https://fonts.googleapis.com/css?family=Open+Sans&subset=cyrillic',
-                // 'payment.style.css' => '/assets/css/payment.style.min.css',
             ],
         ],
     ],
@@ -86,29 +83,25 @@ return [
         ],
         'controllers' => [
             Controller\IndexController::class => [
-                // Give access to "resetPassword", "message" and "setPassword" actions
-                // to anyone.
-                ['actions' => ['resetPassword', 'message', 'setPassword'], 'allow' => '*'],
-                // Give access to "index", "add", "edit", "view", "changePassword" actions to authorized users only.
-                ['actions' => ['index', 'add', 'edit', 'view', 'changePassword'], 'allow' => '@']
+                // Give access to "index", "create" actions to anyone.
+                ['actions' => ['index', 'create'], 'allow' => '*'],
+                // Give access to "edit"  actions to authorized users only.
+                ['actions' => ['edit'], 'allow' => '@']
+            ],
+            Controller\AuthController::class => [
+                ['actions' => ['login', 'logout'], 'allow' => '*'],
             ],
         ]
     ],
     'service_manager' => [
         'aliases' => [
-            // PaymentManagerInterface::class => PaymentManager::class,
-            // YandexServiceInterface::class => YandexService::class,
-            // WebmoneyServiceInterface::class => WebmoneyService::class,
             IssueService::class => IssueServiceImpl::class
         ],
-
         'invokables' => [
-            // ZendClient::class,
             Service\AuthAdapter::class,
         ],
         'factories' => [
             IssueServiceImpl::class => IssueServiceFactory::class,
-
             Service\AuthManager::class => Service\Factory\AuthManagerFactory::class,
             \Zend\Authentication\AuthenticationService::class => Service\Factory\AuthenticationServiceFactory::class,
         ],

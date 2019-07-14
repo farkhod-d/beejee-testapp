@@ -33,6 +33,19 @@ return [
                     ],
                 ],
             ],
+            'edit' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/edit[/:id]',
+                    'constraints' => [
+                        'id'     => '[a-zA-Z0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'edit',
+                    ],
+                ],
+            ],
             'login' => [
                 'type' => Literal::class,
                 'options' => [
@@ -64,19 +77,19 @@ return [
             //         ],
             //     ],
             // ],
-            'issue' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/api/issue[/:id]',
-                    'constraints' => [
-                        'id'     => '[a-zA-Z0-9]+',
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\IssueController::class,
-                        'isAuthorizationRequired' => false,
-                    ],
-                ],
-            ],
+            // 'issue' => [
+            //     'type'    => Segment::class,
+            //     'options' => [
+            //         'route'    => '/api/issue[/:id]',
+            //         'constraints' => [
+            //             'id'     => '[a-zA-Z0-9]+',
+            //         ],
+            //         'defaults' => [
+            //             'controller' => Controller\IssueController::class,
+            //             'isAuthorizationRequired' => false,
+            //         ],
+            //     ],
+            // ],
         ],
     ],
 ];
