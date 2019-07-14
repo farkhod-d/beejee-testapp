@@ -13,6 +13,7 @@
 
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDOSqliteDriver;
+use Doctrine\DBAL\Driver\PDOPgSql\Driver as PDOPgSqlDriver;
 
 return [
     'doctrine' => [
@@ -28,12 +29,22 @@ return [
                     'charset' => 'utf8',
                 ]
             ],
-            'orm_default' => [
+            'orm_default3' => [
                 'driverClass' => PDOSqliteDriver::class,
                 'params' => [
                      'path'=> __DIR__ . '/../../data/db.sqlite',
                 ]
-            ]
+            ],
+            'orm_default' => [
+                'driverClass' => PDOPgSqlDriver::class,
+                'params' => [
+                    'host'      => 'ec2-54-217-234-157.eu-west-1.compute.amazonaws.com',
+                    'dbname'    => 'dgdf1v7lcdlgr',
+                    'user'      => 'cjuivmhwocfhpd',
+                    'password'  => '9e16f1263ca247e0f43e1cbab347f19e5398562f44bd1557283e7ca08e3c4cf7',
+                    'port'      => '5432',
+                ]
+            ],
         ],
     ],
 ];
