@@ -4,25 +4,34 @@ declare(strict_types=1);
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\DBAL\Driver\PDOPgSql\Driver as PDOPgSqlDriver;
 
 // use Doctrine\DBAL\Driver\PDOPgSql\Driver as PDOPgSqlDriver;
 return [
     'doctrine' => [
         'connection' => [
             'orm_default' => [
-                'driverClass' => PDOMySqlDriver::class,
-                'doctrine_type_mappings' => ['enum' => 'string'],
+                'driverClass' => PDOPgSqlDriver::class,
+                //'doctrine_type_mappings' => ['enum' => 'string'],
+                // 'params' => [
+                //     'host' => 'localhost',
+                //     'port' => '3306',
+                //     'user' => '[]',
+                //     'password' => '[]',
+                //     'dbname' => '[]',
+                //     'charset' => 'utf8',
+                //     'driverOptions' => [
+                //         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "UTF8"',
+                //     ],
+                // ],
+
                 'params' => [
-                    'host' => 'localhost',
-                    'port' => '3306',
-                    'user' => '[]',
-                    'password' => '[]',
-                    'dbname' => '[]',
-                    'charset' => 'utf8',
-                    'driverOptions' => [
-                        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "UTF8"',
-                    ],
-                ],
+                    'host'      => 'ec2-54-217-234-157.eu-west-1.compute.amazonaws.com',
+                    'dbname'    => 'dgdf1v7lcdlgr',
+                    'user'      => 'cjuivmhwocfhpd',
+                    'password'  => '9e16f1263ca247e0f43e1cbab347f19e5398562f44bd1557283e7ca08e3c4cf7',
+                    'port'      => '5432',
+                ]
             ],
         ],
         // We need to define now the 'orm_alternative' config,
