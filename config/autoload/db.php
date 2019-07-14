@@ -11,29 +11,29 @@
  * credentials from accidentally being committed into version control.
  */
 
-// use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
-// use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDOSqliteDriver;
-//
-// return [
-//     'doctrine' => [
-//         'connection' => [
-//             'orm_default2' => [
-//                 'driverClass' => PDOMySqlDriver::class,
-//                 'params' => [
-//                     'host'     => 'localhost',
-//                     'port' => '3306',
-//                     'user'     => 'root',
-//                     'password' => '',
-//                     'dbname'   => 'test-beejee',
-//                     'charset' => 'utf8',
-//                 ]
-//             ],
-//             'orm_default' => [
-//                 'driverClass' => PDOSqliteDriver::class,
-//                 'params' => [
-//                      'path'=> __DIR__ . '/../../data/db.sqlite',
-//                 ]
-//             ]
-//         ],
-//     ],
-// ];
+use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
+use Doctrine\DBAL\Driver\PDOSqlite\Driver as PDOSqliteDriver;
+
+return [
+    'doctrine' => [
+        'connection' => [
+            'orm_default2' => [
+                'driverClass' => PDOMySqlDriver::class,
+                'params' => [
+                    'host'     => 'localhost',
+                    'port' => '3306',
+                    'user'     => 'root',
+                    'password' => '',
+                    'dbname'   => 'test-beejee',
+                    'charset' => 'utf8',
+                ]
+            ],
+            'orm_default' => [
+                'driverClass' => PDOSqliteDriver::class,
+                'params' => [
+                     'path'=> __DIR__ . '/../../data/db.sqlite',
+                ]
+            ]
+        ],
+    ],
+];
