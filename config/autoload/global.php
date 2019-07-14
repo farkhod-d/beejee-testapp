@@ -37,8 +37,8 @@ return [
     'session_manager' => [
         // Session validators (used for security).
         'validators' => [
-            RemoteAddr::class,
-            HttpUserAgent::class,
+            //RemoteAddr::class,
+            //HttpUserAgent::class,
         ]
     ],
 

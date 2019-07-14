@@ -8,6 +8,7 @@
 namespace Application\Controller;
 
 use Application\Form\IssueForm;
+use Application\Form\LoginForm;
 use Application\Service\IssueService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -28,6 +29,10 @@ class IndexController extends AbstractActionController
         $this->issueService = $issueService;
     }
 
+    /**
+     * Вывод всех задач
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $page = $this->params()->fromQuery('page', 1);
@@ -41,15 +46,25 @@ class IndexController extends AbstractActionController
         $model->setVariable("sortBy", $sortBy);
         $model->setVariable("orderBy", $orderBy);
 
+        // Для сортировки
         $model->setVariables([
             "cId" => $this->_createIconAndClass("id", $sortBy, $orderBy),
             "cStatus" => $this->_createIconAndClass("status", $sortBy, $orderBy),
             "cUserName" => $this->_createIconAndClass("userName", $sortBy, $orderBy),
             "cUserEmail" => $this->_createIconAndClass("userEmail", $sortBy, $orderBy),
         ]);
+
+        //
         return $model;
     }
 
+    /**
+     * Вспомагательный метод для создание иконки при сортировки
+     * @param $current
+     * @param $sortBy
+     * @param $orderBy
+     * @return array
+     */
     private function _createIconAndClass($current, $sortBy, $orderBy)
     {
         $data = [
@@ -69,6 +84,10 @@ class IndexController extends AbstractActionController
         return $data;
     }
 
+    /**
+     * Создание задач
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function createAction()
     {
         $form = new IssueForm();
@@ -94,5 +113,4 @@ class IndexController extends AbstractActionController
             'form' => $form
         ]);
     }
-
 }

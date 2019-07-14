@@ -10,24 +10,22 @@ namespace Application;
 use Application\Service\Factory\IssueServiceFactory;
 use Application\Service\Impl\IssueServiceImpl;
 use Application\Service\IssueService;
-use Zend\Mvc\Controller\LazyControllerAbstractFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\EntityManager;
 
 return [
 
     'doctrine' => [
         'driver' => [
-           'my_annotation_driver' => [
+            'my_annotation_driver' => [
                 'class' => AnnotationDriver::class,
                 'cache' => 'array',
                 'paths' => [
-                    __DIR__ .  '/../src/Entity'
+                    __DIR__ . '/../src/Entity'
                 ],
             ],
             'orm_default' => [
                 'drivers' => [
-                     __NAMESPACE__ . '\Entity' => 'orm_default_driver'
+                    __NAMESPACE__ . '\Entity' => 'orm_default_driver'
                 ],
             ],
         ],
@@ -41,8 +39,7 @@ return [
         'factories' => [
             Controller\IssueController::class => Controller\Factory\IssueControllerFactory::class,
             Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
-            // Controller\YandexController::class => Controller\Factory\YandexControllerFactory::class,
-            // Controller\BackController::class => LazyControllerAbstractFactory::class,
+            Controller\AuthController::class => Controller\Factory\AuthControllerFactory::class,
         ],
     ],
 
@@ -75,6 +72,28 @@ return [
         ],
     ],
 
+    // The 'access_filter' key is used by the User module to restrict or permit
+    // access to certain controller actions for unauthorized visitors.
+    'access_filter' => [
+        'options' => [
+            // The access filter can work in 'restrictive' (recommended) or 'permissive'
+            // mode. In restrictive mode all controller actions must be explicitly listed
+            // under the 'access_filter' config key, and access is denied to any not listed
+            // action for not logged in users. In permissive mode, if an action is not listed
+            // under the 'access_filter' key, access to it is permitted to anyone (even for
+            // not logged in users. Restrictive mode is more secure and recommended to use.
+            'mode' => 'restrictive'
+        ],
+        'controllers' => [
+            Controller\IndexController::class => [
+                // Give access to "resetPassword", "message" and "setPassword" actions
+                // to anyone.
+                ['actions' => ['resetPassword', 'message', 'setPassword'], 'allow' => '*'],
+                // Give access to "index", "add", "edit", "view", "changePassword" actions to authorized users only.
+                ['actions' => ['index', 'add', 'edit', 'view', 'changePassword'], 'allow' => '@']
+            ],
+        ]
+    ],
     'service_manager' => [
         'aliases' => [
             // PaymentManagerInterface::class => PaymentManager::class,
@@ -85,15 +104,13 @@ return [
 
         'invokables' => [
             // ZendClient::class,
+            Service\AuthAdapter::class,
         ],
         'factories' => [
-            IssueServiceImpl::class => IssueServiceFactory::class
-            // YandexClient::class => YandexClientFactory::class,
+            IssueServiceImpl::class => IssueServiceFactory::class,
 
-            // PaymentManager::class => PaymentManagerFactory::class,
-            // YandexService::class => YandexServiceFactory::class,
-            // WebmoneyService::class => WebmoneyServiceFactory::class,
-
+            Service\AuthManager::class => Service\Factory\AuthManagerFactory::class,
+            \Zend\Authentication\AuthenticationService::class => Service\Factory\AuthenticationServiceFactory::class,
         ],
     ],
 ];

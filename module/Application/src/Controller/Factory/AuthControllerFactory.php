@@ -3,16 +3,15 @@ declare(strict_types=1);
 
 namespace Application\Controller\Factory;
 
-use Application\Controller\IssueController;
-use Doctrine\ORM\EntityManager;
-use Interop\Container\ContainerInterface;
+use Application\Controller\AuthController;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\ContainerInterface;
 
 /**
- * Class IssueController
- * @package Application\Factory
+ * Class AuthControllerFactory
+ * @package
  */
-class IssueControllerFactory implements FactoryInterface
+class AuthControllerFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -24,7 +23,8 @@ class IssueControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $em = $container->get(EntityManager::class);
-        return new IssueController($em);
+        return new AuthController(
+            $container->get(\Application\Service\AuthManager::class)
+        );
     }
 }

@@ -25,14 +25,15 @@
         "zendframework/zend-mvc-i18n": "^1.0",
         "zendframework/zend-i18n": "^2.9",
         "zendframework/zend-i18n-resources": "^2.6",
-        "zendframework/zend-mvc-plugins": "^1.0.1",
+        "zendframework/zend-mvc-plugins": "^1.0",
         "zendframework/zend-crypt": "^3.3",
         "zendframework/zend-math": "^3.2",
         "zendframework/zend-session": "^2.7.1",
 
         "doctrine/doctrine-orm-module": "^2.1",
         "doctrine/doctrine-module": "^2.1",
-        "ankitgs/restapi": "^4.1"
+        "ankitgs/restapi": "^4.1",
+        "zendframework/zend-authentication": "^2.7"
 
     },
     "autoload": {

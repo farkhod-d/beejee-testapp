@@ -1,0 +1,59 @@
+<?php
+/**
+ *
+ * Zend View
+ *
+ * @author Farkhod Daniyarov <fudeglan@gmail.com>
+ * @date 13.07.2019 18:41
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ * @var $form \Zend\Form\Form
+ */
+$this->headTitle('Авторизация');
+$this->headLink()
+    ->appendStylesheet("css/signin.css");
+
+$form = $this->form;
+$form->setAttributes([
+    'action' => $this->url('login'),
+    'class' => "form-signin"
+]);
+
+$form->get('login')->setAttributes([
+    'class' => 'form-control' . ($this->isLoginError ? " is-invalid" : null),
+    "placeholder" => "Логин",
+    "required" => "required",
+    "autofocus1" => "autofocus1",
+])->setLabelAttributes(['class' => 'sr-only']);
+
+$form->get('password')->setAttributes([
+    'class' => 'form-control' . ($this->isLoginError ? " is-invalid" : null),
+    "placeholder" => "Пароль ",
+    "required" => "required",
+])->setLabelAttributes(['class' => 'sr-only']);
+
+$form->prepare();
+?>
+<div id="sign-in">
+    <?= $this->form()->openTag($form) ?>
+    <h1 class="h3 mb-3 font-weight-normal">Авторизация</h1>
+    <?php if ($this->isLoginError): ?>
+        <div class="alert alert-warning" role="alert">
+            <ul class="mb-0 list-unstyled">
+                <li>Incorrect login and/or password.</li>
+            </ul>
+        </div>
+    <?php endif; ?>
+    <?= $this->formLabel($form->get('login')) ?>
+    <?= $this->formElement($form->get('login')) ?>
+    <?= $this->formLabel($form->get('password')) ?>
+    <?= $this->formElement($form->get('password')) ?>
+    <div class="checkbox mb-3">
+        <label>
+            <?= $this->formElement($form->get('remember_me')); ?> Remember me
+        </label>
+    </div>
+    <?= $this->formElement($form->get('csrf')) ?>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Вход</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-<?= date("Y") ?></p>
+    <?= $this->form()->closeTag() ?>
+</div>
