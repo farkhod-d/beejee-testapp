@@ -40,9 +40,14 @@ return [
                 'driver' => 'orm_default',
             ],
         ],
+        // настройка миграций
+        'migrations_configuration' => [
+            'orm_default' => [
+                'directory' => 'data/DoctrineORMModule/Migrations',
+            ],
+        ],
         'driver' => [
             'orm_default' => [
-                'class' => MappingDriverChain::class,
                 'drivers' => [
                      __NAMESPACE__ . '\Entity' => 'orm_default_driver',
                 ],

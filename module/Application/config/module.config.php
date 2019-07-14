@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 return [
     'doctrine' => [
         'driver' => [
-            'my_annotation_driver' => [
+            'Application_driver' => [
                 'class' => AnnotationDriver::class,
                 'cache' => 'array',
                 'paths' => [
@@ -24,7 +24,7 @@ return [
             ],
             'orm_default' => [
                 'drivers' => [
-                    __NAMESPACE__ . '\Entity' => 'orm_default_driver'
+                    'Application\Entity' => 'Application_driver'
                 ],
             ],
         ],

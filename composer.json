@@ -33,7 +33,8 @@
         "doctrine/doctrine-orm-module": "^2.1",
         "doctrine/doctrine-module": "^2.1",
         "ankitgs/restapi": "^4.1",
-        "zendframework/zend-authentication": "^2.7"
+        "zendframework/zend-authentication": "^2.7",
+        "doctrine/migrations": "^2.1"
 
     },
     "autoload": {
