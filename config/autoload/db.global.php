@@ -18,23 +18,23 @@ use Doctrine\DBAL\Driver\PDOPgSql\Driver as PDOPgSqlDriver;
 return [
     'doctrine' => [
         'connection' => [
-            'orm_default2' => [
-                'driverClass' => PDOMySqlDriver::class,
-                'params' => [
-                    'host'     => 'localhost',
-                    'port' => '3306',
-                    'user'     => 'root',
-                    'password' => '',
-                    'dbname'   => 'test-beejee',
-                    'charset' => 'utf8',
-                ]
-            ],
-            'orm_default3' => [
-                'driverClass' => PDOSqliteDriver::class,
-                'params' => [
-                     'path'=> __DIR__ . '/../../data/db.sqlite',
-                ]
-            ],
+            // 'orm_default2' => [
+            //     'driverClass' => PDOMySqlDriver::class,
+            //     'params' => [
+            //         'host'     => 'localhost',
+            //         'port' => '3306',
+            //         'user'     => 'root',
+            //         'password' => '',
+            //         'dbname'   => 'test-beejee',
+            //         'charset' => 'utf8',
+            //     ]
+            // ],
+            // 'orm_default3' => [
+            //     'driverClass' => PDOSqliteDriver::class,
+            //     'params' => [
+            //          'path'=> __DIR__ . '/../../data/db.sqlite',
+            //     ]
+            // ],
             'orm_default' => [
                 'driverClass' => PDOPgSqlDriver::class,
                 'params' => [
